@@ -1,0 +1,16 @@
+{
+    "week_starting": "2022-01-17",
+    "standard_working_hours" : {
+        "weekly_hours": 36,
+        "weekly_minutes": 45
+    },    
+    "flextime_balance": {
+        "balance": "credit",
+        "balance_hours": 3,
+        "balance_minutes": 13
+    },
+    "work" : [],
+    "flex": [],
+    "holiday": [],
+    "sick": []
+}
