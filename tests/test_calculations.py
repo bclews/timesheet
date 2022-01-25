@@ -35,7 +35,7 @@ def test_duration_is_zero():
     assert minutes == 0
     assert seconds == 0
 
-def test_duration_is_a_correct_value():
+def test_duration_is_a_valid_value():
     # setup
     duration = timedelta(hours=2, seconds=2705)
 
@@ -69,7 +69,7 @@ def test_periods_is_zero():
     assert minutes == 0
     assert seconds == 0
 
-def test_periods_is_correct_value():
+def test_periods_is_valid_value():
     # setup
     periods = [
         {"start": "2022-01-10T08:00", "end": "2022-01-10T12:00"},
@@ -168,3 +168,22 @@ def test_with_date_being_None():
 def test_with_date_being_wrong_type():
     with pytest.raises(TypeError, match="`given_date` should be a date type, not <class 'str'>"):
             assert calculations.find_date_of_next_monday("THIS_IS_A_DAMN_STRING")
+
+#
+# Testing `is_timedelta_positive`
+#
+def test_with_positive_timedelta():
+    delta = timedelta(days=1)
+    assert calculations.is_timedelta_positive(delta)
+
+def test_with_negative_timedelta():
+    delta = timedelta(days=-1)
+    assert not calculations.is_timedelta_positive(delta)
+
+def test_with_zero_timedelta():
+    delta = timedelta(days=0)
+    assert calculations.is_timedelta_positive(delta)
+
+def test_with_date_being_None():
+    with pytest.raises(TypeError, match="`delta` should be a date type, not <class 'NoneType'>"):
+            assert calculations.is_timedelta_positive(None)
