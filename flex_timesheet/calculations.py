@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from collections.abc import Iterable
 
 def split_timedelta(duration):
@@ -46,3 +46,37 @@ def aggregate(periods):
 
     aggregate = sum(timedeltas, timedelta())
     return split_timedelta(aggregate)
+
+def find_date_of_previous_monday(given_date):
+    """
+    Finds the date of the most recent Monday. If the date is for a Monday then this
+    method will return that exact date. For example if `given_date` is Monday 7th Febraury 2022 
+    then this method will return Monday 7th Febraury 2022.
+
+    Args:
+        given_date (date): a period of time, e.g.
+
+    Returns:
+        date (date) of the most recent Monday to have passed
+    """ 
+    if not isinstance(given_date, date):
+        raise TypeError(f"`given_date` should be a date type, not {type(given_date)}")
+    
+    return given_date - timedelta(days=given_date.weekday())
+
+def find_date_of_next_monday(given_date):
+    """
+    Finds the date of the next Monday. If the date is for a Monday then this
+    method will return the date of the next Monday. For example if `given_date` is
+    Monday 7th Febraury 2022 then this method will return Monday 14th Febraury 2022.
+
+    Args:
+        given_date (date): a period of time, e.g.
+
+    Returns:
+        date (date) of the next upcoming Monday
+    """      
+    if not isinstance(given_date, date):
+        raise TypeError(f"`given_date` should be a date type, not {type(given_date)}")
+
+    return given_date + timedelta(days=-given_date.weekday(), weeks=1)
