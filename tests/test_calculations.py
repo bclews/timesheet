@@ -45,7 +45,6 @@ def test_duration_is_a_valid_value():
     assert minutes == 45
     assert seconds == 5
 
-
 #
 # Testing `aggregate`
 #

@@ -96,16 +96,7 @@ def find_date_of_next_monday(given_date):
 
 def is_timedelta_positive(delta):
     """
-    Determines if a timedelta onject is positive or negative.
-
-    From the documentation => https://docs.python.org/3/library/datetime.html
-        Only days, seconds and microseconds are stored internally.
-    And:
-        days, seconds and microseconds are then normalized so that the representation 
-        is unique, with:
-            0 <= microseconds < 1000000
-            0 <= seconds < 3600*24 (the number of seconds in one day)
-            -999999999 <= days <= 999999999
+    Determines if a timedelta is positive or negative.
 
     Args:
         delta (datetime.timedelta): timedelta to be assessed
@@ -119,4 +110,4 @@ def is_timedelta_positive(delta):
     if not isinstance(delta, timedelta):
         raise TypeError(f"`delta` should be a date type, not {type(delta)}")
 
-    return delta.days >= 0
+    return delta >= timedelta(hours=0)

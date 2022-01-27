@@ -6,9 +6,9 @@
         "days_in_working_week": 5
     },
     "flextime_balance": {
-        "balance": "credit",
-        "hours": 3,
-        "minutes": 13
+        based on timedelta documentation in https://docs.python.org/3/library/datetime.html
+        "days": 0,
+        "seconds": 11580
     },
     "work": [
         {
