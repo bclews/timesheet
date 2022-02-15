@@ -1,0 +1,29 @@
+{
+    "time_sheets": [
+        {
+            "week_starting": "2022-02-14",
+            "standard_working_hours_per_week": {
+                "hours": 36,
+                "minutes": 45,
+                "days_in_working_week": 5
+            },
+            "flextime_balance": {
+                "days": 0,
+                "seconds": 0
+            },
+            "work": [
+                {
+                    "start": "2022-02-15T08:00:00",
+                    "end": "2022-02-15T17:00:00"
+                },
+                {
+                    "start": "2022-02-15T08:00:00",
+                    "end": "2022-02-15T19:00:00"
+                }
+            ],
+            "flex": [],
+            "holiday": [],
+            "sick": []
+        }
+    ]
+}
