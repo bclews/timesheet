@@ -32,5 +32,40 @@ def test_12_hour_format_is_not_wanted_also():
 
 
 #
-# Testing `invalid_datepy`
+# Testing `invalid_date`
 #
+def test_random_strings_are_not_a_valid_date():
+    assert parse.invalid_date("abcd") == True
+
+def test_formats_are_invalid():
+    assert parse.invalid_date("22-12-01") == True
+    assert parse.invalid_date("01-12-22") == True
+    assert parse.invalid_date("01-12-2022") == True
+
+def test_bunch_of_invalid_dates():
+    assert parse.invalid_date("2022-01-32") == True
+    assert parse.invalid_date("2022-02-32") == True
+    assert parse.invalid_date("2022-03-32") == True
+    assert parse.invalid_date("2022-04-32") == True
+    assert parse.invalid_date("2022-05-32") == True
+    assert parse.invalid_date("2022-06-32") == True
+    assert parse.invalid_date("2022-07-32") == True
+    assert parse.invalid_date("2022-08-32") == True
+    assert parse.invalid_date("2022-09-32") == True
+    assert parse.invalid_date("2022-10-32") == True
+    assert parse.invalid_date("2022-11-32") == True
+    assert parse.invalid_date("2022-12-32") == True
+
+def test_bunch_of_valid_dates():
+    assert parse.invalid_date("2022-01-01") == False
+    assert parse.invalid_date("2022-02-01") == False
+    assert parse.invalid_date("2022-03-01") == False
+    assert parse.invalid_date("2022-04-01") == False
+    assert parse.invalid_date("2022-05-01") == False
+    assert parse.invalid_date("2022-06-01") == False
+    assert parse.invalid_date("2022-07-01") == False
+    assert parse.invalid_date("2022-08-01") == False
+    assert parse.invalid_date("2022-09-01") == False
+    assert parse.invalid_date("2022-10-01") == False
+    assert parse.invalid_date("2022-11-01") == False
+    assert parse.invalid_date("2022-12-01") == False
