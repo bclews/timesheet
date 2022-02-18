@@ -38,7 +38,7 @@ def flex(
     """
     Add a period of flex to the timesheet.
     """
-    typer.echo(f"{time_start=} {time_end=} {date=}")
+    flex_timesheet.flex(time_start, time_end, date)
 
 @app.command()
 def sick(
@@ -49,7 +49,7 @@ def sick(
     """
     Add a period of sick leave to the timesheet.
     """
-    typer.echo(f"{time_start=} {time_end=} {date=}")
+    flex_timesheet.sick(time_start, time_end, date)
 
 @app.command()
 def holiday(
@@ -60,7 +60,7 @@ def holiday(
     """
     Add a period of holiday to the timesheet.
     """
-    typer.echo(f"{time_start=} {time_end=} {date=}")
+    flex_timesheet.holiday(time_start, time_end, date)
 
 if __name__ == "__main__":
     app()
