@@ -3,6 +3,11 @@ import flex_timesheet
 import parse
 from datetime import date
 
+WORK = "work"
+FLEX = "flex"
+SICK = "sick"
+HOLIDAY = "holiday"
+
 
 def get_date():
     return date.today()
@@ -31,7 +36,7 @@ def work(
     Date should be in current week? If not, how do we retrospectively deal with flex? Easy. Right?
     """
     try:
-        flex_timesheet.add_event("work", time_start, time_end, date)
+        flex_timesheet.add_event(WORK, time_start, time_end, date)
     except parse.InputException as error:
         print(error)
 
@@ -48,7 +53,7 @@ def flex(
     Add a period of flex to the timesheet.
     """
     try:
-        flex_timesheet.add_event("flex", time_start, time_end, date)
+        flex_timesheet.add_event(FLEX, time_start, time_end, date)
     except parse.InputException as error:
         print(error)
 
@@ -65,7 +70,7 @@ def sick(
     Add a period of sick leave to the timesheet.
     """
     try:
-        flex_timesheet.add_event("sick", time_start, time_end, date)
+        flex_timesheet.add_event(SICK, time_start, time_end, date)
     except parse.InputException as error:
         print(error)
 
@@ -80,7 +85,7 @@ def holiday(
     Add a period of holiday to the timesheet.
     """
     try:
-        flex_timesheet.add_event("holiday", time_start, time_end, date)
+        flex_timesheet.add_event(HOLIDAY, time_start, time_end, date)
     except parse.InputException as error:
         print(error)
 
