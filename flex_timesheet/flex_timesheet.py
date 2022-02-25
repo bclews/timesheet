@@ -52,42 +52,13 @@ def add_event(event_type, time_start, time_end, the_date):
 
     timesheets = retrieve_timesheets()
     for timesheet in timesheets:
+        # find existing timesheet
         if parse.get_date(timesheet["week_starting"]) == week_start:
             timesheet[event_type].append(event_log)
             save_timesheets(timesheets)
             break
     else:
+        # a timesheet does not yet exist for the given date, so create a new one
         timesheet = create_new_timesheet(week_start, event_type, event_log)
         timesheets.append(timesheet)
         save_timesheets(timesheets)
-
-
-#
-#
-#
-def work(time_start, time_end, the_date):
-    try:
-        add_event("work", time_start, time_end, the_date)
-    except parse.InputException as error:
-        print(error)
-
-
-def flex(time_start, time_end, the_date):
-    try:
-        add_event("flex", time_start, time_end, the_date)
-    except parse.InputException as error:
-        print(error)
-
-
-def sick(time_start, time_end, the_date):
-    try:
-        add_event("sick", time_start, time_end, the_date)
-    except parse.InputException as error:
-        print(error)
-
-
-def holiday(time_start, time_end, the_date):
-    try:
-        add_event("holiday", time_start, time_end, the_date)
-    except parse.InputException as error:
-        print(error)
