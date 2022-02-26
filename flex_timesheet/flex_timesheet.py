@@ -1,5 +1,3 @@
-from datetime import datetime
-from venv import create
 import calculations
 import parse
 import json
@@ -9,12 +7,12 @@ FILENAME = "flex_timesheet.json"
 #
 # File handling...
 #
-def retrieve_timesheets():
+def retrieve_timesheet_file():
     with open(FILENAME) as timesheet_file:
         return json.load(timesheet_file)
 
 
-def save_timesheets(timesheet):
+def save_timesheet_file(timesheet):
     with open(FILENAME, "w") as timesheet_file:
         timesheet_json = json.dumps(timesheet, indent=4)
         timesheet_file.write(timesheet_json)
@@ -50,15 +48,15 @@ def add_event(event_type, time_start, time_end, the_date):
     event_log = create_event_log(time_start, time_end, the_date)
     week_start = get_week_start(the_date)
 
-    timesheets = retrieve_timesheets()
-    for timesheet in timesheets:
+    timesheet_file = retrieve_timesheet_file()
+    for timesheet in timesheet_file["timesheets"]:
         # find existing timesheet
         if parse.get_date(timesheet["week_starting"]) == week_start:
             timesheet[event_type].append(event_log)
-            save_timesheets(timesheets)
+            save_timesheet_file(timesheet_file)
             break
     else:
         # a timesheet does not yet exist for the given date, so create a new one
         timesheet = create_new_timesheet(week_start, event_type, event_log)
-        timesheets.append(timesheet)
-        save_timesheets(timesheets)
+        timesheet_file.append(timesheet)
+        save_timesheet_file(timesheet_file)
