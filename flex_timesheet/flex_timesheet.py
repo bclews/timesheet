@@ -58,5 +58,5 @@ def add_event(event_type, time_start, time_end, the_date):
     else:
         # a timesheet does not yet exist for the given date, so create a new one
         timesheet = create_new_timesheet(week_start, event_type, event_log)
-        timesheet_file.append(timesheet)
+        timesheet_file['timesheets'].append(timesheet)
         save_timesheet_file(timesheet_file)
