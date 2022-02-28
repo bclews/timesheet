@@ -38,7 +38,7 @@ def work(
     try:
         flex_timesheet.add_event(WORK, time_start, time_end, date)
     except parse.InputException as error:
-        print(error)
+        typer.echo(error)
 
 
 @app.command()
@@ -55,7 +55,7 @@ def flex(
     try:
         flex_timesheet.add_event(FLEX, time_start, time_end, date)
     except parse.InputException as error:
-        print(error)
+        typer.echo(error)
 
 
 @app.command()
@@ -72,7 +72,7 @@ def sick(
     try:
         flex_timesheet.add_event(SICK, time_start, time_end, date)
     except parse.InputException as error:
-        print(error)
+        typer.echo(error)
 
 
 @app.command()
@@ -87,7 +87,7 @@ def holiday(
     try:
         flex_timesheet.add_event(HOLIDAY, time_start, time_end, date)
     except parse.InputException as error:
-        print(error)
+        typer.echo(error)
 
 
 if __name__ == "__main__":
