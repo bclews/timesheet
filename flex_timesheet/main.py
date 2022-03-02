@@ -21,7 +21,8 @@ def report(date: str = typer.Argument(get_date, help="Default value is today's d
     """
     What is my timesheet looking like? Is it beer o'clock yet?
     """
-    typer.echo(f"{date=}")
+    # typer.echo(f"{date=}")
+    flex_timesheet.report()
 
 
 @app.command()

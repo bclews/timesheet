@@ -7,14 +7,22 @@ FILENAME = "flex_timesheet.json"
 #
 # File handling...
 #
+def sort(timesheets):
+    return {
+        "standard_working_hours_per_week" : timesheets["standard_working_hours_per_week"],
+        "flextime_balance" : timesheets["flextime_balance"],
+        "timesheets" : sorted(timesheets["timesheets"], key=lambda d: d['week_starting'])
+    }
+
 def retrieve_timesheet_file():
     with open(FILENAME) as timesheet_file:
         return json.load(timesheet_file)
 
 
-def save_timesheet_file(timesheet):
+def save_timesheet_file(timesheets):
+    sorted_timesheets = sort(timesheets)
     with open(FILENAME, "w") as timesheet_file:
-        timesheet_json = json.dumps(timesheet, indent=4)
+        timesheet_json = json.dumps(sorted_timesheets, indent=4)
         timesheet_file.write(timesheet_json)
 
 
@@ -49,14 +57,29 @@ def add_event(event_type, time_start, time_end, the_date):
     week_start = get_week_start(the_date)
 
     timesheet_file = retrieve_timesheet_file()
-    for timesheet in timesheet_file["timesheets"]:
-        # find existing timesheet
-        if parse.get_date(timesheet["week_starting"]) == week_start:
-            timesheet[event_type].append(event_log)
+    for timesheets in timesheet_file["timesheets"]:
+        # find existing timesheets
+        if parse.get_date(timesheets["week_starting"]) == week_start:
+            timesheets[event_type].append(event_log)
             save_timesheet_file(timesheet_file)
             break
     else:
-        # a timesheet does not yet exist for the given date, so create a new one
-        timesheet = create_new_timesheet(week_start, event_type, event_log)
-        timesheet_file['timesheets'].append(timesheet)
+        # a timesheets does not yet exist for the given date, so create a new one
+        timesheets = create_new_timesheet(week_start, event_type, event_log)
+        timesheet_file['timesheets'].append(timesheets)
         save_timesheet_file(timesheet_file)
+
+#
+# Timesheet reporting...
+#
+def report():
+    timesheet_file = retrieve_timesheet_file()
+    for timesheets in timesheet_file["timesheets"]:
+        print(timesheets["week_starting"])
+
+    print()
+    print()
+    
+    newlist = sorted(timesheet_file["timesheets"], key=lambda d: d['week_starting']) 
+    for i in newlist:
+        print(i["week_starting"])
