@@ -51,8 +51,11 @@ def aggregate(periods):
             end = datetime.fromisoformat(period["end"])
             timedeltas.append(end-start)
 
-    aggregate = sum(timedeltas, timedelta())
-    return split_timedelta(aggregate)
+    return sum(timedeltas, timedelta())
+
+# TODO: unit test
+def aggregate_timedeltas(timedeltas):
+    return sum(timedeltas, timedelta())
 
 def find_date_of_previous_monday(given_date):
     """

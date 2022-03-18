@@ -98,21 +98,32 @@ def report(the_date):
     week_start = get_week_start(the_date)
 
     report = []
-    report.append( typer.style(f"Week starting: ", bold=True) + week_start.strftime("%Y-%m-%d"))
+    report.append( typer.style(f"Week starting: ", bold=True) + typer.style(week_start.strftime("%Y-%m-%d"), fg=typer.colors.MAGENTA))
     
     timesheet_file = retrieve_timesheet_file()
     for timesheet in timesheet_file["timesheets"]:
         # find existing timesheets
         if parse.get_date(timesheet["week_starting"]) == week_start:
-            hours_work, minutes_work, seconds_work = calculations.aggregate(timesheet["work"])
-            hours_flex, minutes_flex, seconds_flex = calculations.aggregate(timesheet["flex"])
-            hours_holiday, minutes_holiday, seconds_holiday = calculations.aggregate(timesheet["holiday"])
-            hours_sick, minutes_sick, seconds_sick = calculations.aggregate(timesheet["sick"])
+            total_work_timedelta = calculations.aggregate(timesheet["work"])
+            total_flex_timedelta = calculations.aggregate(timesheet["flex"])
+            total_holiday_timedelta = calculations.aggregate(timesheet["holiday"])
+            total_sick_timedelta = calculations.aggregate(timesheet["sick"])
+            total_timedelta = calculations.aggregate_timedeltas([total_work_timedelta, total_flex_timedelta, total_holiday_timedelta, total_sick_timedelta])
+
+            hours_work, minutes_work, seconds_work = calculations.split_timedelta(total_work_timedelta)
+            hours_flex, minutes_flex, seconds_flex = calculations.split_timedelta(total_flex_timedelta)
+            hours_holiday, minutes_holiday, seconds_holiday = calculations.split_timedelta(total_holiday_timedelta)
+            hours_sick, minutes_sick, seconds_sick = calculations.split_timedelta(total_sick_timedelta)
+            hours_total, minutes_total, seconds_total = calculations.split_timedelta(total_timedelta)
             
-            report.append( typer.style(f"   Hours work: ", bold=True) + f"{hours_work} hours, {minutes_work} minutes")
-            report.append( typer.style(f"   Hours flex: ", bold=True) + f"{hours_flex} hours, {minutes_flex} minutes")
-            report.append( typer.style(f"Hours holiday: ", bold=True) + f"{hours_holiday} hours, {minutes_holiday} minutes")
-            report.append( typer.style(f"   Hours sick: ", bold=True) + f"{hours_sick} hours, {minutes_sick} minutes")
+            report.append(typer.style(f"Hours accounted for: ", bold=True) + typer.style(f"{hours_total} hours, {minutes_total} minutes", fg=typer.colors.MAGENTA))
+            report.append(typer.style(f"               work: ", bold=True) + f"{hours_work} hours, {minutes_work} minutes")
+            report.append(typer.style(f"               flex: ", bold=True) + f"{hours_flex} hours, {minutes_flex} minutes")
+            report.append(typer.style(f"            holiday: ", bold=True) + f"{hours_holiday} hours, {minutes_holiday} minutes")
+            report.append(typer.style(f"               sick: ", bold=True) + f"{hours_sick} hours, {minutes_sick} minutes")
+
+            report.append("Flex at the start of the week...")
+            report.append("Flex at the end of the week...")
 
             break
 
