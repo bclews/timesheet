@@ -2,6 +2,7 @@ import calculations
 import parse
 import json
 import typer
+from datetime import timedelta
 
 FILENAME = "flex_timesheet.json"
 
@@ -95,36 +96,52 @@ def add_event(event_type, time_start, time_end, the_date):
 #
 # Hours sick: 0 hours, 0 minutes
 def report(the_date):
-    week_start = get_week_start(the_date)
+    #TODO: remove the flex entry from the timesheet.json - we do not need to record flex
+
+    timesheet_file = retrieve_timesheet_file()
+
+    # Get standard weekly hours
+    standard_weekly_hours = timedelta(
+        hours=timesheet_file["standard_working_hours_per_week"]["hours"], 
+        minutes=timesheet_file["standard_working_hours_per_week"]["minutes"]
+    )
 
     report = []
-    report.append( typer.style(f"Week starting: ", bold=True) + typer.style(week_start.strftime("%Y-%m-%d"), fg=typer.colors.MAGENTA))
-    
-    timesheet_file = retrieve_timesheet_file()
+    total_flex = timedelta(seconds=0)
     for timesheet in timesheet_file["timesheets"]:
-        # find existing timesheets
-        if parse.get_date(timesheet["week_starting"]) == week_start:
-            total_work_timedelta = calculations.aggregate(timesheet["work"])
-            total_flex_timedelta = calculations.aggregate(timesheet["flex"])
-            total_holiday_timedelta = calculations.aggregate(timesheet["holiday"])
-            total_sick_timedelta = calculations.aggregate(timesheet["sick"])
-            total_timedelta = calculations.aggregate_timedeltas([total_work_timedelta, total_flex_timedelta, total_holiday_timedelta, total_sick_timedelta])
+        aggregate_week_work = calculations.aggregate(timesheet["work"])
+        aggregate_week_holiday = calculations.aggregate(timesheet["holiday"])
+        aggregate_week_sick = calculations.aggregate(timesheet["sick"])
+        aggregate_week = calculations.aggregate_timedeltas([aggregate_week_work, aggregate_week_holiday, aggregate_week_sick])
 
-            hours_work, minutes_work, seconds_work = calculations.split_timedelta(total_work_timedelta)
-            hours_flex, minutes_flex, seconds_flex = calculations.split_timedelta(total_flex_timedelta)
-            hours_holiday, minutes_holiday, seconds_holiday = calculations.split_timedelta(total_holiday_timedelta)
-            hours_sick, minutes_sick, seconds_sick = calculations.split_timedelta(total_sick_timedelta)
-            hours_total, minutes_total, seconds_total = calculations.split_timedelta(total_timedelta)
-            
-            report.append(typer.style(f"Hours accounted for: ", bold=True) + typer.style(f"{hours_total} hours, {minutes_total} minutes", fg=typer.colors.MAGENTA))
-            report.append(typer.style(f"               work: ", bold=True) + f"{hours_work} hours, {minutes_work} minutes")
-            report.append(typer.style(f"               flex: ", bold=True) + f"{hours_flex} hours, {minutes_flex} minutes")
-            report.append(typer.style(f"            holiday: ", bold=True) + f"{hours_holiday} hours, {minutes_holiday} minutes")
-            report.append(typer.style(f"               sick: ", bold=True) + f"{hours_sick} hours, {minutes_sick} minutes")
+        hours_work, minutes_work, seconds_work = calculations.split_timedelta(aggregate_week_work)
+        hours_holiday, minutes_holiday, seconds_holiday = calculations.split_timedelta(aggregate_week_holiday)
+        hours_sick, minutes_sick, seconds_sick = calculations.split_timedelta(aggregate_week_sick)
+        hours_total, minutes_total, seconds_total = calculations.split_timedelta(aggregate_week)
 
-            report.append("Flex at the start of the week...")
-            report.append("Flex at the end of the week...")
+        # TODO: There is an error with this calculation
+        # For week starting 2022-06-13 I accounted for 34 hours, 27 minutes
+        # For a standard working week of 36 hours 45 minutes, this should result in a deficit of 2.3 hours, not -3 hours 42 minutes
+        weekly_accumulated_flex =  aggregate_week - standard_weekly_hours
+        hours_flex, minutes_flex, seconds_total = calculations.split_timedelta(weekly_accumulated_flex)
+        total_flex += weekly_accumulated_flex
 
-            break
+        week_starting = parse.get_date(timesheet["week_starting"])
+        report.append( typer.style(f"Week starting: ", bold=True) + typer.style(week_starting.strftime("%Y-%m-%d"), fg=typer.colors.MAGENTA))
+        report.append(typer.style(f"Hours accounted for: ", bold=True) + typer.style(f"{hours_total} hours, {minutes_total} minutes", fg=typer.colors.MAGENTA))
+        report.append(typer.style(f"               work: ", bold=True) + f"{hours_work} hours, {minutes_work} minutes")
+        report.append(typer.style(f"            holiday: ", bold=True) + f"{hours_holiday} hours, {minutes_holiday} minutes")
+        report.append(typer.style(f"               sick: ", bold=True) + f"{hours_sick} hours, {minutes_sick} minutes")
+        report.append(typer.style(f"       accrued flex: ", bold=True) + f"{hours_flex} hours, {minutes_flex} minutes")
+        report.append("")
+
+
+    starting_flextime_balance = timedelta(
+        hours=timesheet_file["flextime_balance"]["days"], 
+        minutes=timesheet_file["flextime_balance"]["seconds"]
+    )
+
+    total_hours_flex, total_minutes_flex, total_seconds_flex = calculations.split_timedelta(total_flex + starting_flextime_balance)
+    report.append(typer.style(f"Total flex: ", bold=True) + f"{total_hours_flex} hours, {total_minutes_flex} minutes")
 
     return report
