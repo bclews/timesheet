@@ -4,7 +4,7 @@ import json
 import typer
 from datetime import timedelta
 
-FILENAME = "flex_timesheet.json"
+FILENAME = "flex_timesheet_2023_2024.json"
 
 #
 # File handling...
@@ -79,15 +79,15 @@ def add_event(event_type, time_start, time_end, the_date):
 # Total logged hours: 33 hours, 33 minutes
 #
 # Hours work: 22 hours, 22 minutes
-#        Monday 08:00-12:00 
+#        Monday 08:00-12:00
 #        Monday 13:00-17:00
-#       Tuesday 08:00-12:00 
+#       Tuesday 08:00-12:00
 #       Tuesday 13:00-17:00
-#     Wednesday 08:00-12:00 
+#     Wednesday 08:00-12:00
 #     Wednesday 13:00-17:00
-#      Thursday 08:00-12:00 
+#      Thursday 08:00-12:00
 #      Thursday 13:00-17:00
-#        Friday 08:00-12:00 
+#        Friday 08:00-12:00
 #        Friday 13:00-17:00
 #
 # Hours flex: 0 hours, 0 minutes
@@ -102,7 +102,7 @@ def report(the_date):
 
     # Get standard weekly hours
     standard_weekly_hours = timedelta(
-        hours=timesheet_file["standard_working_hours_per_week"]["hours"], 
+        hours=timesheet_file["standard_working_hours_per_week"]["hours"],
         minutes=timesheet_file["standard_working_hours_per_week"]["minutes"]
     )
 
@@ -137,7 +137,7 @@ def report(the_date):
 
 
     starting_flextime_balance = timedelta(
-        hours=timesheet_file["flextime_balance"]["days"], 
+        hours=timesheet_file["flextime_balance"]["days"],
         minutes=timesheet_file["flextime_balance"]["seconds"]
     )
 
