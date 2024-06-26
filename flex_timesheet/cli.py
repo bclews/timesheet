@@ -3,7 +3,10 @@ from pathlib import Path
 
 import typer
 
-from flex_timesheet import commands, parse
+from flex_timesheet.common import parse
+import flex_timesheet.commands.report as r
+import flex_timesheet.commands.configuration as c
+import flex_timesheet.commands.timesheet as ts
 
 WORK = "work"
 FLEX = "flex"
@@ -25,7 +28,7 @@ def configure(
     Configure the timesheet application.
     """
     try:
-        commands.configure(config_path)
+        c.configure(config_path)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -38,7 +41,7 @@ def show_config(
     Show the current configuration settings.
     """
     try:
-        commands.show_config(config_path)
+        c.show_config(config_path)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -48,7 +51,7 @@ def report(date: str = typer.Argument(get_date, help="Default value is today's d
     """
     What is my timesheet looking like? Is it beer o'clock yet?
     """
-    for line in commands.report():
+    for line in r.report():
         typer.echo(line)
 
 
@@ -64,7 +67,7 @@ def work(
     Date should be in current week? If not, how do we retrospectively deal with flex? Easy. Right?
     """
     try:
-        commands.add_event(WORK, time_start, time_end, date)
+        ts.add_event(WORK, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -81,7 +84,7 @@ def flex(
     Add a period of flex to the timesheet.
     """
     try:
-        commands.add_event(FLEX, time_start, time_end, date)
+        ts.add_event(FLEX, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -98,7 +101,7 @@ def sick(
     Add a period of sick leave to the timesheet.
     """
     try:
-        commands.add_event(SICK, time_start, time_end, date)
+        ts.add_event(SICK, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -113,7 +116,7 @@ def holiday(
     Add a period of holiday to the timesheet.
     """
     try:
-        commands.add_event(HOLIDAY, time_start, time_end, date)
+        ts.add_event(HOLIDAY, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
