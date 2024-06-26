@@ -1,10 +1,11 @@
-from flex_timesheet import calculations
-from flex_timesheet import parse
-from flex_timesheet import configuration
-
 import json
+import os
+from datetime import timedelta
+from pathlib import Path
+
 import typer
-from datetime import time, timedelta
+
+from flex_timesheet import calculations, configuration, parse
 
 # FILENAME = "/Users/cle126/Developer/bitbucket/cle126/flex-timesheet/flex_timesheet/flex_timesheet_2023_2024.json"
 
@@ -193,3 +194,28 @@ def report():
     )
 
     return report
+
+
+def configure(config_path: Path):
+    if config_path is None:
+        config_path = configuration.get_default_config_path()
+
+    config_data = configuration.read(config_path)
+
+    config_data["timesheet_file"] = os.path.expanduser(
+        typer.prompt(
+            "Enter the location to save your timesheet",
+            default=config_data.get("timesheet_file", "~/timesheet.json"),
+        )
+    )
+
+    configuration.write(config_path, config_data)
+    typer.echo(f"Configuration saved to {config_path}")
+
+
+def show_config(config_path: Path):
+    if config_path is None:
+        config_path = configuration.get_default_config_path()
+
+    config_data = configuration.read(config_path)
+    typer.echo(json.dumps(config_data, indent=4))
