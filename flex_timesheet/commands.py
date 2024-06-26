@@ -147,29 +147,29 @@ def report():
 
         week_starting = parse.get_date(timesheet["week_starting"])
         report.append(
-            typer.style(f"Week starting: ", bold=True)
+            typer.style("Week starting: ", bold=True)
             + typer.style(week_starting.strftime("%Y-%m-%d"), fg=typer.colors.MAGENTA)
         )
         report.append(
-            typer.style(f"Hours accounted for: ", bold=True)
+            typer.style("Hours accounted for: ", bold=True)
             + typer.style(
                 f"{hours_total} hours, {minutes_total} minutes", fg=typer.colors.MAGENTA
             )
         )
         report.append(
-            typer.style(f"               work: ", bold=True)
+            typer.style("               work: ", bold=True)
             + f"{hours_work} hours, {minutes_work} minutes"
         )
         report.append(
-            typer.style(f"            holiday: ", bold=True)
+            typer.style("            holiday: ", bold=True)
             + f"{hours_holiday} hours, {minutes_holiday} minutes"
         )
         report.append(
-            typer.style(f"               sick: ", bold=True)
+            typer.style("               sick: ", bold=True)
             + f"{hours_sick} hours, {minutes_sick} minutes"
         )
         report.append(
-            typer.style(f"       accrued flex: ", bold=True)
+            typer.style("       accrued flex: ", bold=True)
             + f"{hours_flex} hours, {minutes_flex} minutes"
         )
         report.append("")
@@ -183,7 +183,7 @@ def report():
         calculations.split_timedelta(total_flex + starting_flextime_balance)
     )
     report.append(
-        typer.style(f"Total flex: ", bold=True)
+        typer.style("Total flex: ", bold=True)
         + f"{total_hours_flex} hours, {total_minutes_flex} minutes"
     )
 

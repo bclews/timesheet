@@ -1,5 +1,5 @@
 import typer
-from flex_timesheet import main
+from flex_timesheet import commands
 from flex_timesheet import parse
 from datetime import date
 
@@ -21,7 +21,7 @@ def report(date: str = typer.Argument(get_date, help="Default value is today's d
     """
     What is my timesheet looking like? Is it beer o'clock yet?
     """
-    for line in main.report():
+    for line in commands.report():
         typer.echo(line)
 
 
@@ -37,7 +37,7 @@ def work(
     Date should be in current week? If not, how do we retrospectively deal with flex? Easy. Right?
     """
     try:
-        main.add_event(WORK, time_start, time_end, date)
+        commands.add_event(WORK, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -54,7 +54,7 @@ def flex(
     Add a period of flex to the timesheet.
     """
     try:
-        main.add_event(FLEX, time_start, time_end, date)
+        commands.add_event(FLEX, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -71,7 +71,7 @@ def sick(
     Add a period of sick leave to the timesheet.
     """
     try:
-        main.add_event(SICK, time_start, time_end, date)
+        commands.add_event(SICK, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
@@ -86,10 +86,10 @@ def holiday(
     Add a period of holiday to the timesheet.
     """
     try:
-        main.add_event(HOLIDAY, time_start, time_end, date)
+        commands.add_event(HOLIDAY, time_start, time_end, date)
     except parse.InputException as error:
         typer.echo(error)
 
 
-if __name__ == "__main__":
+if __name__ == "__main_":
     app()
