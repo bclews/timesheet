@@ -54,24 +54,18 @@ def report():
             [aggregate_week_work, aggregate_week_holiday, aggregate_week_sick]
         )
 
-        hours_work, minutes_work, seconds_work = calculations.split_timedelta(
-            aggregate_week_work
-        )
-        hours_holiday, minutes_holiday, seconds_holiday = calculations.split_timedelta(
+        hours_work, minutes_work, _ = calculations.split_timedelta(aggregate_week_work)
+        hours_holiday, minutes_holiday, _ = calculations.split_timedelta(
             aggregate_week_holiday
         )
-        hours_sick, minutes_sick, seconds_sick = calculations.split_timedelta(
-            aggregate_week_sick
-        )
-        hours_total, minutes_total, seconds_total = calculations.split_timedelta(
-            aggregate_week
-        )
+        hours_sick, minutes_sick, _ = calculations.split_timedelta(aggregate_week_sick)
+        hours_total, minutes_total, _ = calculations.split_timedelta(aggregate_week)
 
         # TODO: There is an error with this calculation
         # For week starting 2022-06-13 I accounted for 34 hours, 27 minutes
         # For a standard working week of 36 hours 45 minutes, this should result in a deficit of 2.3 hours, not -3 hours 42 minutes
         weekly_accumulated_flex = aggregate_week - standard_weekly_hours
-        hours_flex, minutes_flex, seconds_total = calculations.split_timedelta(
+        hours_flex, minutes_flex, _ = calculations.split_timedelta(
             weekly_accumulated_flex
         )
         total_flex += weekly_accumulated_flex
@@ -110,8 +104,8 @@ def report():
         minutes=timesheet_file["flextime_balance"]["seconds"],
     )
 
-    total_hours_flex, total_minutes_flex, total_seconds_flex = (
-        calculations.split_timedelta(total_flex + starting_flextime_balance)
+    total_hours_flex, total_minutes_flex, _ = calculations.split_timedelta(
+        total_flex + starting_flextime_balance
     )
     report.append(
         typer.style("Total flex: ", bold=True)
