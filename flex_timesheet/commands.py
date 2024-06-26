@@ -1,10 +1,12 @@
 from flex_timesheet import calculations
 from flex_timesheet import parse
+from flex_timesheet import configuration
+
 import json
 import typer
-from datetime import timedelta
+from datetime import time, timedelta
 
-FILENAME = "/Users/cle126/Developer/bitbucket/cle126/flex-timesheet/flex_timesheet/flex_timesheet_2023_2024.json"
+# FILENAME = "/Users/cle126/Developer/bitbucket/cle126/flex-timesheet/flex_timesheet/flex_timesheet_2023_2024.json"
 
 
 #
@@ -23,13 +25,16 @@ def sort(timesheets):
 
 
 def retrieve_timesheet_file():
-    with open(FILENAME) as timesheet_file:
+    timesheet_file = configuration.get_timesheet_file()
+    with open(timesheet_file) as timesheet_file:
         return json.load(timesheet_file)
 
 
 def save_timesheet_file(timesheets):
     sorted_timesheets = sort(timesheets)
-    with open(FILENAME, "w") as timesheet_file:
+
+    timesheet_file = configuration.get_timesheet_file()
+    with open(timesheet_file, "w") as timesheet_file:
         timesheet_json = json.dumps(sorted_timesheets, indent=4)
         timesheet_file.write(timesheet_json)
 

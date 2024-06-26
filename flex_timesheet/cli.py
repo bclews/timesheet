@@ -1,19 +1,59 @@
-import typer
-from flex_timesheet import commands
-from flex_timesheet import parse
+import json
+import os
 from datetime import date
+from pathlib import Path
+
+import typer
+
+from flex_timesheet import commands, configuration, parse
 
 WORK = "work"
 FLEX = "flex"
 SICK = "sick"
 HOLIDAY = "holiday"
 
+app = typer.Typer()
+
 
 def get_date():
     return date.today()
 
 
-app = typer.Typer()
+@app.command()
+def configure(
+    config_path: Path = typer.Option(None, help="Path to the configuration file"),
+):
+    """
+    Configure the timesheet application.
+    """
+    if config_path is None:
+        config_path = configuration.get_default_config_path()
+
+    config_data = configuration.read_config(config_path)
+
+    config_data["timesheet_file"] = os.path.expanduser(
+        typer.prompt(
+            "Enter the location to save your timesheet",
+            default=config_data.get("timesheet_file", "~/timesheet.json"),
+        )
+    )
+
+    configuration.write_config(config_path, config_data)
+    typer.echo(f"Configuration saved to {config_path}")
+
+
+@app.command()
+def show_config(
+    config_path: Path = typer.Option(None, help="Path to the configuration file"),
+):
+    """
+    Show the current configuration settings.
+    """
+    if config_path is None:
+        config_path = configuration.get_default_config_path()
+
+    config_data = configuration.read_config(config_path)
+    typer.echo(json.dumps(config_data, indent=4))
 
 
 @app.command()
