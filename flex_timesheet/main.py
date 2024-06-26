@@ -4,7 +4,7 @@ import json
 import typer
 from datetime import timedelta
 
-FILENAME = "flex_timesheet_2023_2024.json"
+FILENAME = "/Users/cle126/Developer/bitbucket/cle126/flex-timesheet/flex_timesheet/flex_timesheet_2023_2024.json"
 
 
 #
@@ -102,7 +102,7 @@ def add_event(event_type, time_start, time_end, the_date):
 # Hours holiday: 0 hours, 0 minutes
 #
 # Hours sick: 0 hours, 0 minutes
-def report(the_date):
+def report():
     # TODO: remove the flex entry from the timesheet.json - we do not need to record flex
 
     timesheet_file = retrieve_timesheet_file()

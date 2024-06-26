@@ -21,7 +21,7 @@ def report(date: str = typer.Argument(get_date, help="Default value is today's d
     """
     What is my timesheet looking like? Is it beer o'clock yet?
     """
-    for line in main.report(date):
+    for line in main.report():
         typer.echo(line)
 
 
