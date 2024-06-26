@@ -31,42 +31,15 @@ def write(config_path: Path, config_data: dict):
 
 def get_timesheet_file():
     """
-    Get the timesheet file path. If it does not exist, create it
-    with the following content:
-
-    ```json
-    {
-        "standard_working_hours_per_week": {
-            "hours": 36,
-            "minutes": 45,
-            "days_in_working_week": 5
-        },
-        "flextime_balance": {
-            "days": 0,
-            "seconds": 0
-        },
-        "timesheets": [],
-    }
-    ```
+    Get the timesheet file path. If it does not exist, raise
+    an error asking the end user to configure the application.
     """
     config_path = get_default_config_path()
     config_data = read(config_path)
 
     timesheet_file = config_data.get("timesheet_file", "timesheet.json")
     if not Path(timesheet_file).exists():
-        with open(timesheet_file, "w") as f:
-            json.dump(
-                {
-                    "standard_working_hours_per_week": {
-                        "hours": 36,
-                        "minutes": 45,
-                        "days_in_working_week": 5,
-                    },
-                    "flextime_balance": {"days": 0, "seconds": 0},
-                    "timesheets": [],
-                },
-                f,
-                indent=4,
-            )
-
+        raise FileNotFoundError(
+            "Timesheet file not found. Please run `timesheet configure` to set it up."
+        )
     return timesheet_file

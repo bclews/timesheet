@@ -32,7 +32,11 @@ import flex_timesheet.common.timesheet as ts
 def report():
     # TODO: remove the flex entry from the timesheet.json - we do not need to record flex
 
-    timesheet_file = ts.retrieve_timesheet_file()
+    try:
+        timesheet_file = ts.retrieve_timesheet_file()
+    except FileNotFoundError as e:
+        typer.echo(e)
+        raise typer.Exit(code=1)
 
     # Get standard weekly hours
     standard_weekly_hours = timedelta(
