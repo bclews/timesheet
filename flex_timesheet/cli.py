@@ -72,23 +72,6 @@ def work(
 
 
 @app.command()
-def flex(
-    time_start: str = typer.Argument(
-        ..., help="Time the period of flex leave started."
-    ),
-    time_end: str = typer.Argument(..., help="Time the period of flex leave ended."),
-    date: str = typer.Argument(get_date, help="Default value is today's date."),
-):
-    """
-    Add a period of flex to the timesheet.
-    """
-    try:
-        ts.add_event(FLEX, time_start, time_end, date)
-    except parse.InputException as error:
-        typer.echo(error)
-
-
-@app.command()
 def sick(
     time_start: str = typer.Argument(
         ..., help="Time the period of sick leave started."
