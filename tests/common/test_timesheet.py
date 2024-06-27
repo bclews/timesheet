@@ -103,17 +103,31 @@ def test_get_week_start():
     assert week_start == datetime(2022, 1, 3)
 
 
-def test_create_event_log():
-    # Given a start time, end time, and date
-    time_start = "09:00"
-    time_end = "17:00"
-    the_date = "2022-01-01"
-
-    # When we create an event log
-    event_log = timesheet.create_event_log(time_start, time_end, the_date)
-
-    # Then the event log should have the correct structure and data
-    assert event_log == {
-        "start": "2022-01-01T09:00:00",
-        "end": "2022-01-01T17:00:00",
+def test_create_event_log_without_location():
+    date = "2022-01-01"
+    time_start = "10:00"
+    time_end = "12:00"
+    expected = {
+        "start": datetime.strptime(
+            f"{date} {time_start}", "%Y-%m-%d %H:%M"
+        ).isoformat(),
+        "end": datetime.strptime(f"{date} {time_end}", "%Y-%m-%d %H:%M").isoformat(),
     }
+    result = timesheet.create_event_log(time_start, time_end, date)
+    assert result == expected
+
+
+def test_create_event_log_with_location():
+    date = "2022-01-01"
+    time_start = "10:00"
+    time_end = "12:00"
+    location = "Office"
+    expected = {
+        "start": datetime.strptime(
+            f"{date} {time_start}", "%Y-%m-%d %H:%M"
+        ).isoformat(),
+        "end": datetime.strptime(f"{date} {time_end}", "%Y-%m-%d %H:%M").isoformat(),
+        "location": location,
+    }
+    result = timesheet.create_event_log(time_start, time_end, date, location)
+    assert result == expected

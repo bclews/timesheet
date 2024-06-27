@@ -3,8 +3,8 @@ import flex_timesheet.common.configuration as conf
 import flex_timesheet.common.timesheet as ts
 
 
-def add_event(event_type, time_start, time_end, the_date):
-    event_log = ts.create_event_log(time_start, time_end, the_date)
+def add_event(event_type, time_start, time_end, the_date, location=None):
+    event_log = ts.create_event_log(time_start, time_end, the_date, location)
     week_start = ts.get_week_start(the_date)
 
     config_path = conf.get_default_config_path()

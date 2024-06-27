@@ -30,6 +30,11 @@ def mock_the_date():
     return datetime.strptime("2024-06-27", "%Y-%m-%d")
 
 
+@pytest.fixture
+def mock_get_location():
+    return "Office"
+
+
 @patch("flex_timesheet.common.timesheet.save_timesheet_file")
 @patch("flex_timesheet.common.timesheet.retrieve_timesheet_file")
 @patch("flex_timesheet.common.timesheet.create_event_log")
@@ -47,6 +52,7 @@ def test_add_event_existing_timesheet(
     mock_time_start,
     mock_time_end,
     mock_the_date,
+    mock_get_location,
 ):
     # Arrange
     mock_get_date.return_value = datetime.strptime("2024-06-24", "%Y-%m-%d")
@@ -56,11 +62,17 @@ def test_add_event_existing_timesheet(
     mock_retrieve_timesheet_file.return_value = mock_timesheet_file
 
     # Act
-    add_event(mock_event_type, mock_time_start, mock_time_end, mock_the_date)
+    add_event(
+        mock_event_type,
+        mock_time_start,
+        mock_time_end,
+        mock_the_date,
+        mock_get_location,
+    )
 
     # Assert
     mock_create_event_log.assert_called_once_with(
-        mock_time_start, mock_time_end, mock_the_date
+        mock_time_start, mock_time_end, mock_the_date, mock_get_location
     )
     mock_get_week_start.assert_called_once_with(mock_the_date)
     mock_retrieve_timesheet_file.assert_called_once_with("/mock/timesheet/file/path")
@@ -88,6 +100,7 @@ def test_add_event_new_timesheet(
     mock_time_start,
     mock_time_end,
     mock_the_date,
+    mock_get_location,
 ):
     # Arrange
     mock_get_week_start.return_value = datetime.strptime("2024-06-24", "%Y-%m-%d")
@@ -101,11 +114,17 @@ def test_add_event_new_timesheet(
     mock_create_new_timesheet.return_value = mock_new_timesheet
 
     # Act
-    add_event(mock_event_type, mock_time_start, mock_time_end, mock_the_date)
+    add_event(
+        mock_event_type,
+        mock_time_start,
+        mock_time_end,
+        mock_the_date,
+        mock_get_location,
+    )
 
     # Assert
     mock_create_event_log.assert_called_once_with(
-        mock_time_start, mock_time_end, mock_the_date
+        mock_time_start, mock_time_end, mock_the_date, mock_get_location
     )
     mock_get_week_start.assert_called_once_with(mock_the_date)
     mock_retrieve_timesheet_file.assert_called_once_with("/mock/timesheet/file/path")

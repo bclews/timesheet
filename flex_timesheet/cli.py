@@ -71,6 +71,7 @@ def show_entries(
 def work(
     time_start: str = typer.Argument(..., help="Time the period of work started."),
     time_end: str = typer.Argument(..., help="Time the period of work ended."),
+    location: str = typer.Argument("Home", help="Location of work. Default is 'Home'."),
     date: str = typer.Argument(get_date, help="Default value is today's date."),
 ):
     """
@@ -79,7 +80,7 @@ def work(
     Date should be in current week? If not, how do we retrospectively deal with flex? Easy. Right?
     """
     try:
-        ts.add_event(WORK, time_start, time_end, date)
+        ts.add_event(WORK, time_start, time_end, date, location)
     except parse.InputException as error:
         typer.echo(error)
 

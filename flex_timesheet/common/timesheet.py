@@ -44,7 +44,13 @@ def get_week_start(the_date):
     return calculations.find_date_of_previous_monday(parsed_date)
 
 
-def create_event_log(time_start, time_end, the_date):
+def create_event_log(time_start, time_end, the_date, location=None):
     start = parse.get_datetime(the_date, time_start)
     end = parse.get_datetime(the_date, time_end)
-    return {"start": start.isoformat(), "end": end.isoformat()}
+
+    event_log = {"start": start.isoformat(), "end": end.isoformat()}
+
+    if location is not None:
+        event_log["location"] = location
+
+    return event_log
