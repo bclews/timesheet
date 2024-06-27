@@ -1,8 +1,9 @@
 from datetime import date, datetime, timedelta
 from collections.abc import Iterable
 
+
 def split_timedelta(duration):
-    """ 
+    """
     Splits the timedelta object into hours, minutes and seconds.
 
     Args:
@@ -18,11 +19,12 @@ def split_timedelta(duration):
 
     hours = days * 24 + seconds // 3600
     minutes = (seconds % 3600) // 60
-    seconds = (seconds % 60)
+    seconds = seconds % 60
     return hours, minutes, seconds
 
+
 def aggregate(periods):
-    """ 
+    """
     Aggregates an array of logged time periods.
 
     Args:
@@ -38,7 +40,7 @@ def aggregate(periods):
 
     Returns:
         hours (int or float) of the duration
-        minutes (int or float) of the duration 
+        minutes (int or float) of the duration
         seconds (int or float) of the duration
     """
     if not isinstance(periods, Iterable):
@@ -49,13 +51,17 @@ def aggregate(periods):
         if all(key in period for key in ("start", "end")):
             start = datetime.fromisoformat(period["start"])
             end = datetime.fromisoformat(period["end"])
-            timedeltas.append(end-start)
+            timedeltas.append(end - start)
 
     return sum(timedeltas, timedelta())
 
-# TODO: unit test
+
 def aggregate_timedeltas(timedeltas):
+    """
+    Sums an array of timedelta objects.
+    """
     return sum(timedeltas, timedelta())
+
 
 def find_date_of_previous_monday(given_date):
     """
@@ -77,6 +83,7 @@ def find_date_of_previous_monday(given_date):
 
     return given_date - timedelta(days=given_date.weekday())
 
+
 def find_date_of_next_monday(given_date):
     """
     Finds the date of the next Monday. If the date is for a Monday then this
@@ -96,6 +103,7 @@ def find_date_of_next_monday(given_date):
         raise TypeError(f"`given_date` should be a date type, not {type(given_date)}")
 
     return given_date + timedelta(days=-given_date.weekday(), weeks=1)
+
 
 def is_timedelta_positive(delta):
     """

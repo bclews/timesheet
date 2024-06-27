@@ -221,3 +221,17 @@ def test_with_date_being_None():
         TypeError, match="`delta` should be a date type, not <class 'NoneType'>"
     ):
         assert calculations.is_timedelta_positive(None)
+
+
+#
+# Testing `aggregate_timedeltas`
+#
+def test_aggregate_timedeltas():
+    # Given a list of timedeltas
+    timedeltas = [timedelta(hours=1), timedelta(hours=2), timedelta(hours=3)]
+
+    # When we aggregate the timedeltas
+    total_timedelta = calculations.aggregate_timedeltas(timedeltas)
+
+    # Then the total timedelta should be the sum of the timedeltas
+    assert total_timedelta == timedelta(hours=6)
