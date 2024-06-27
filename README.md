@@ -84,6 +84,14 @@ Add a period of holiday to the timesheet.
 timesheet holiday 09:00 17:00 2023-01-01
 ```
 
+### Show Timesheets in CSV Format
+
+Print the timesheets to the console in CSV format.
+
+```sh
+timesheet show_csv
+```
+
 ## Timesheet Format
 
 The timesheet is saved as a JSON file, defined in the configuration. The JSON structure of the timesheet is as follows:
@@ -145,6 +153,7 @@ The timesheet is saved as a JSON file, defined in the configuration. The JSON st
 - `work` - Add a period of work.
 - `sick` - Add a period of sick leave.
 - `holiday` - Add a period of holiday.
+- `show_csv` - Print the timesheets to the console in CSV format.
 
 ## Development and Testing
 
