@@ -10,7 +10,7 @@ from timesheet.commands.report import (
     EchoWriter,
     format_hours_and_minutes,
     get_timesheet_data,
-    report,
+    show_report,
     show_csv,
     show_entries,
 )
@@ -107,7 +107,7 @@ def test_report(
 
     mock_split.side_effect = mock_split_side_effect
 
-    report()
+    show_report()
 
     assert mock_echo.called
     output = "\n".join([call.args[0] for call in mock_echo.call_args_list])

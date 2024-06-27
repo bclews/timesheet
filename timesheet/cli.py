@@ -47,11 +47,13 @@ def show_config(
 
 
 @app.command()
-def report(date: str = typer.Argument(get_date, help="Default value is today's date.")):
+def show_report(
+    date: str = typer.Argument(get_date, help="Default value is today's date."),
+):
     """
     What is my timesheet looking like? Is it beer o'clock yet?
     """
-    r.report()
+    r.show_report()
 
 
 @app.command()

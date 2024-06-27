@@ -20,7 +20,7 @@ def format_hours_and_minutes(hours, minutes):
     return f"{hours} hours, {minutes} minutes"
 
 
-def report():
+def show_report():
     timesheet_file = get_timesheet_data()
 
     standard_weekly_hours = timedelta(
