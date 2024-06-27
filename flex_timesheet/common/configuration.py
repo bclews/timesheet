@@ -29,14 +29,15 @@ def write(config_path: Path, config_data: dict):
         json.dump(config_data, f, indent=4)
 
 
-def get_timesheet_file():
+def get_timesheet_file(config_data: dict):
     """
     Get the timesheet file path. If it does not exist, raise
     an error asking the end user to configure the application.
     """
-    config_path = get_default_config_path()
-    config_data = read(config_path)
-
+    if not config_data:
+        raise FileNotFoundError(
+            "Configuration file not found. Please run `timesheet configure` to set it up."
+        )
     timesheet_file = config_data.get("timesheet_file", "timesheet.json")
     if not Path(timesheet_file).exists():
         raise FileNotFoundError(

@@ -33,7 +33,10 @@ def report():
     # TODO: remove the flex entry from the timesheet.json - we do not need to record flex
 
     try:
-        timesheet_file_path = configuration.get_timesheet_file()
+        config_path = configuration.get_default_config_path()
+        config_data = configuration.read(config_path)
+
+        timesheet_file_path = configuration.get_timesheet_file(config_data)
         timesheet_file = ts.retrieve_timesheet_file(timesheet_file_path)
     except FileNotFoundError as e:
         typer.echo(e)
