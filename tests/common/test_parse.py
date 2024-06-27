@@ -1,4 +1,6 @@
+import pytest
 import flex_timesheet.common.parse as parse
+from flex_timesheet.common.parse import InputException
 
 
 #
@@ -73,3 +75,58 @@ def test_bunch_of_valid_dates():
     assert not parse.invalid_date("2022-10-01")
     assert not parse.invalid_date("2022-11-01")
     assert not parse.invalid_date("2022-12-01")
+
+
+def test_get_datetime():
+    # Given a valid date and time
+    the_date = "2022-01-01"
+    the_time = "09:00"
+
+    # When we get the datetime
+    the_datetime = parse.get_datetime(the_date, the_time)
+
+    # Then the datetime should be correct
+    assert the_datetime == parse.datetime(2022, 1, 1, 9, 0)
+
+
+def test_get_datetime_invalid_date():
+    # Given an invalid date and a valid time
+    the_date = "invalid"
+    the_time = "09:00"
+
+    # When we try to get the datetime
+    # Then an InputException should be raised
+    with pytest.raises(InputException):
+        parse.get_datetime(the_date, the_time)
+
+
+def test_get_datetime_invalid_time():
+    # Given a valid date and an invalid time
+    the_date = "2022-01-01"
+    the_time = "invalid"
+
+    # When we try to get the datetime
+    # Then an InputException should be raised
+    with pytest.raises(InputException):
+        parse.get_datetime(the_date, the_time)
+
+
+def test_get_date():
+    # Given a valid date
+    the_date = "2022-01-01"
+
+    # When we get the date
+    date = parse.get_date(the_date)
+
+    # Then the date should be correct
+    assert date == parse.datetime(2022, 1, 1)
+
+
+def test_get_date_invalid():
+    # Given an invalid date
+    the_date = "invalid"
+
+    # When we try to get the date
+    # Then an InputException should be raised
+    with pytest.raises(InputException):
+        parse.get_date(the_date)
