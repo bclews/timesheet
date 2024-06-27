@@ -68,6 +68,17 @@ def show_entries(
 
 
 @app.command()
+def show_csv():
+    """
+    Print the timesheets to the console in CSV format.
+    """
+    try:
+        r.show_csv()
+    except parse.InputException as error:
+        typer.echo(error)
+
+
+@app.command()
 def work(
     time_start: str = typer.Argument(..., help="Time the period of work started."),
     time_end: str = typer.Argument(..., help="Time the period of work ended."),

@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 import typer
 from flex_timesheet.common import calculations, configuration, parse
 import flex_timesheet.common.timesheet as ts
+import csv
 
 
 def get_timesheet_data():
@@ -108,3 +109,36 @@ def show_entries(date):
                         + f" from {start.strftime('%Y-%m-%d %H:%M')} to {end.strftime('%Y-%m-%d %H:%M')}"
                     )
             typer.echo("\n".join(report))
+
+
+class EchoWriter:
+    def write(self, message):
+        typer.echo(message, nl=False)
+
+    def flush(self):
+        pass  # For compatibility with file objects
+
+
+def show_csv():
+    timesheet_file = get_timesheet_data()
+    csv_columns = ["week_starting", "event_type", "start", "end", "location"]
+    csv_data = []
+
+    for timesheet in timesheet_file["timesheets"]:
+        week_starting = timesheet["week_starting"]
+
+        for event_type in ["work", "holiday", "sick"]:
+            for event in timesheet[event_type]:
+                csv_data.append(
+                    {
+                        "week_starting": week_starting,
+                        "event_type": event_type,
+                        "start": event["start"],
+                        "end": event["end"],
+                        "location": event.get("location", ""),
+                    }
+                )
+
+    writer = csv.DictWriter(EchoWriter(), fieldnames=csv_columns)
+    writer.writeheader()
+    writer.writerows(csv_data)

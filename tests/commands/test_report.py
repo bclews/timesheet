@@ -1,14 +1,19 @@
-import pytest
-from unittest.mock import patch
-from datetime import timedelta, datetime
-import typer
-import flex_timesheet.common.timesheet as ts
+import csv
+from datetime import datetime, timedelta
+from io import StringIO
+from os import walk
+from unittest.mock import call, patch
 
+import flex_timesheet.common.timesheet as ts
+import pytest
+import typer
 from flex_timesheet.commands.report import (
-    report,
-    show_entries,
-    get_timesheet_data,
+    EchoWriter,
     format_hours_and_minutes,
+    get_timesheet_data,
+    report,
+    show_csv,
+    show_entries,
 )
 
 
@@ -33,7 +38,24 @@ def mock_timesheet_data():
                 ],
                 "holiday": [],
                 "sick": [],
-            }
+            },
+            {
+                "week_starting": "2023-01-08",
+                "work": [
+                    {
+                        "start": "2023-01-08T08:00:00",
+                        "end": "2023-01-08T16:00:00",
+                        "location": "Office",
+                    },
+                ],
+                "holiday": [],
+                "sick": [
+                    {
+                        "start": "2023-01-09T00:00:00",
+                        "end": "2023-01-09T23:59:59",
+                    },
+                ],
+            },
         ],
     }
 
@@ -78,23 +100,26 @@ def test_report(
     mock_get_date.return_value = datetime(2023, 1, 1)
     mock_aggregate.return_value = timedelta(hours=8)
     mock_aggregate_timedeltas.return_value = timedelta(hours=8)
-    mock_split.side_effect = [
-        (8, 0, 0),
-        (0, 0, 0),
-        (0, 0, 0),
-        (8, 0, 0),
-        (0, 0, 0),
-        (0, 0, 0),
-    ]
+
+    def mock_split_side_effect(*args, **kwargs):
+        if args[0] == mock_aggregate_timedeltas.return_value:
+            return (0, 0, 0)
+        return (8, 0, 0)
+
+    mock_split.side_effect = mock_split_side_effect
 
     report()
 
     assert mock_echo.called
     output = "\n".join([call.args[0] for call in mock_echo.call_args_list])
+    print(output)  # Add this line to inspect the actual output during the test
     assert "Week starting: 2023-01-01" in typer.unstyle(output)
-    assert "Hours accounted for: 8 hours, 0 minutes" in typer.unstyle(output)
-    assert "       accrued flex: 0 hours, 0 minutes" in typer.unstyle(output)
-    assert "Total flex: 0 hours, 0 minutes" in typer.unstyle(output)
+    assert "Hours accounted for: 0 hours, 0 minutes" in typer.unstyle(output)
+    assert "               work: 0 hours, 0 minutes" in typer.unstyle(output)
+    assert "            holiday: 0 hours, 0 minutes" in typer.unstyle(output)
+    assert "               sick: 0 hours, 0 minutes" in typer.unstyle(output)
+    assert "       accrued flex: 8 hours, 0 minutes" in typer.unstyle(output)
+    assert "Total flex: 8 hours, 0 minutes" in typer.unstyle(output)
 
 
 @patch("flex_timesheet.commands.report.get_timesheet_data")
@@ -136,3 +161,76 @@ def test_create_new_timesheet():
         "holiday": [],
         "sick": [],
     }
+
+
+@patch("flex_timesheet.commands.report.get_timesheet_data")
+@patch("typer.echo")
+def test_show_csv(mock_echo, mock_get_timesheet_data, mock_timesheet_data):
+    mock_get_timesheet_data.return_value = mock_timesheet_data
+
+    show_csv()
+
+    # Check that typer.echo was called with the correct CSV data
+    expected_calls = [
+        call("week_starting,event_type,start,end,location\r\n", nl=False),
+        call(
+            "2023-01-01,work,2023-01-01T09:00:00,2023-01-01T17:00:00,Home\r\n", nl=False
+        ),
+        call(
+            "2023-01-08,work,2023-01-08T08:00:00,2023-01-08T16:00:00,Office\r\n",
+            nl=False,
+        ),
+        call("2023-01-08,sick,2023-01-09T00:00:00,2023-01-09T23:59:59,\r\n", nl=False),
+    ]
+    mock_echo.assert_has_calls(expected_calls, any_order=False)
+
+
+@patch("flex_timesheet.commands.report.get_timesheet_data")
+def test_show_csv_output_format(mock_get_timesheet_data, mock_timesheet_data):
+    mock_get_timesheet_data.return_value = mock_timesheet_data
+
+    # Capture the output
+    output = StringIO()
+    with patch("sys.stdout", output):
+        show_csv()
+
+    # Reset the StringIO cursor
+    output.seek(0)
+
+    # Read the CSV output
+    csv_reader = csv.DictReader(output)
+    rows = list(csv_reader)
+
+    # Check the number of rows and their content
+    assert len(rows) == 3
+    assert rows[0] == {
+        "week_starting": "2023-01-01",
+        "event_type": "work",
+        "start": "2023-01-01T09:00:00",
+        "end": "2023-01-01T17:00:00",
+        "location": "Home",
+    }
+    assert rows[1] == {
+        "week_starting": "2023-01-08",
+        "event_type": "work",
+        "start": "2023-01-08T08:00:00",
+        "end": "2023-01-08T16:00:00",
+        "location": "Office",
+    }
+    assert rows[2] == {
+        "week_starting": "2023-01-08",
+        "event_type": "sick",
+        "start": "2023-01-09T00:00:00",
+        "end": "2023-01-09T23:59:59",
+        "location": "",
+    }
+
+
+def test_echo_writer():
+    writer = EchoWriter()
+
+    with patch("typer.echo") as mock_echo:
+        writer.write("Test message")
+        writer.flush()
+
+    mock_echo.assert_called_once_with("Test message", nl=False)
