@@ -144,6 +144,7 @@ The timesheet is saved as a JSON file, defined in the configuration. The JSON st
     }
   ]
 }
+```
 
 ### JSON Schema Explanation
 
@@ -152,6 +153,7 @@ This JSON schema is designed to track timesheets, including working hours, flext
 #### Root Object
 
 The root object contains three main properties:
+
 1. `standard_working_hours_per_week`
 2. `flextime_balance`
 3. `timesheets`
@@ -159,6 +161,7 @@ The root object contains three main properties:
 #### `standard_working_hours_per_week`
 
 This object defines the standard working hours for a week. It has three properties:
+
 - `hours`: The total number of hours expected to be worked in a week. In this case, it is set to 36 hours.
 - `minutes`: Additional minutes to be worked in a week. Here, it is set to 45 minutes.
 - `days_in_working_week`: The number of working days in a week. Here, it is set to 5 days.
@@ -168,6 +171,7 @@ These standard working hours are used to calculate flextime by comparing them ag
 #### `flextime_balance`
 
 This object tracks the initial balance of flextime (flexible working hours) brought forward from a previous timesheet. It has two properties:
+
 - `days`: The number of days of flextime balance. Initially set to 0.
 - `seconds`: The number of seconds of flextime balance. Initially set to 0.
 
@@ -184,6 +188,7 @@ A string representing the starting date of the week in `YYYY-MM-DD` format. For 
 ##### `work`
 
 This is an array of work periods within the week. Each work period is an object with the following properties:
+
 - `start`: A string representing the start date and time of the work period in ISO 8601 format (`YYYY-MM-DDTHH:MM:SS`). For example, "2023-07-03T09:00:00" indicates the work period starts on July 3, 2023, at 9:00 AM.
 - `end`: A string representing the end date and time of the work period in ISO 8601 format. For example, "2023-07-03T16:21:00" indicates the work period ends on July 3, 2023, at 4:21 PM.
 - `location`: A string indicating the location where the work was performed. For example, "Home" or "Onsite".
@@ -199,6 +204,7 @@ This is an array of sick leave periods within the week. Each sick leave period i
 ### Flextime Calculation
 
 The flextime calculation involves the following steps:
+
 1. Determine the total actual hours worked in the week by summing up the durations of all work periods.
 2. Compare the total actual hours worked with the standard working hours for the week (defined in `standard_working_hours_per_week`).
 3. Adjust the `flextime_balance` based on the difference between the actual hours worked and the standard working hours:
@@ -220,7 +226,6 @@ Given the example JSON schema:
 - No holiday or sick leave periods are recorded for this week.
 
 By calculating the actual hours worked and comparing them to the standard working hours, the new flextime balance is determined and carried over to the next timesheet.
-```
 
 ## Commands Overview
 
