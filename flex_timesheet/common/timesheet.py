@@ -3,19 +3,17 @@ import json
 from flex_timesheet.common import calculations, configuration, parse
 
 
-def retrieve_timesheet_file():
-    timesheet_file = configuration.get_timesheet_file()
-    with open(timesheet_file) as timesheet_file:
-        return json.load(timesheet_file)
+def retrieve_timesheet_file(timesheet_file_path):
+    with open(timesheet_file_path) as timesheet_file_path:
+        return json.load(timesheet_file_path)
 
 
-def save_timesheet_file(timesheets):
+def save_timesheet_file(timesheet_file_path, timesheets):
     sorted_timesheets = sort(timesheets)
 
-    timesheet_file = configuration.get_timesheet_file()
-    with open(timesheet_file, "w") as timesheet_file:
+    with open(timesheet_file_path, "w") as timesheet_file_path:
         timesheet_json = json.dumps(sorted_timesheets, indent=4)
-        timesheet_file.write(timesheet_json)
+        timesheet_file_path.write(timesheet_json)
 
 
 def sort(timesheets):

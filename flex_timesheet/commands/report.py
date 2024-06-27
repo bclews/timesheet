@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 import typer
-from flex_timesheet.common import calculations, parse
+from flex_timesheet.common import calculations, configuration, parse
 import flex_timesheet.common.timesheet as ts
 
 
@@ -33,7 +33,8 @@ def report():
     # TODO: remove the flex entry from the timesheet.json - we do not need to record flex
 
     try:
-        timesheet_file = ts.retrieve_timesheet_file()
+        timesheet_file_path = configuration.get_timesheet_file()
+        timesheet_file = ts.retrieve_timesheet_file(timesheet_file_path)
     except FileNotFoundError as e:
         typer.echo(e)
         raise typer.Exit(code=1)
