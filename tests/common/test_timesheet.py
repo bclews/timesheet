@@ -42,14 +42,12 @@ def test_sort_timesheets():
             {
                 "week_starting": "2022-01-10",
                 "work": [],
-                "flex": [],
                 "holiday": [],
                 "sick": [],
             },
             {
                 "week_starting": "2022-01-03",
                 "work": [],
-                "flex": [],
                 "holiday": [],
                 "sick": [],
             },
@@ -64,14 +62,12 @@ def test_sort_timesheets():
         {
             "week_starting": "2022-01-03",
             "work": [],
-            "flex": [],
             "holiday": [],
             "sick": [],
         },
         {
             "week_starting": "2022-01-10",
             "work": [],
-            "flex": [],
             "holiday": [],
             "sick": [],
         },
@@ -91,7 +87,6 @@ def test_create_new_timesheet():
     assert new_timesheet == {
         "week_starting": "2022-01-01",
         "work": [{"start": "09:00", "end": "17:00"}],
-        "flex": [],
         "holiday": [],
         "sick": [],
     }

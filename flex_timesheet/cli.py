@@ -55,6 +55,19 @@ def report(date: str = typer.Argument(get_date, help="Default value is today's d
 
 
 @app.command()
+def show_entries(
+    date: str = typer.Argument(get_date, help="Default value is today's date."),
+):
+    """
+    Show the timesheet for week of the given date.
+    """
+    try:
+        r.show_entries(date)
+    except parse.InputException as error:
+        typer.echo(error)
+
+
+@app.command()
 def work(
     time_start: str = typer.Argument(..., help="Time the period of work started."),
     time_end: str = typer.Argument(..., help="Time the period of work ended."),

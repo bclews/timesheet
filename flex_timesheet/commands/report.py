@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 import typer
 from flex_timesheet.common import calculations, configuration, parse
 import flex_timesheet.common.timesheet as ts
@@ -84,3 +84,27 @@ def report():
     )
 
     typer.echo("\n".join(report))
+
+
+def show_entries(date):
+    week_start = ts.get_week_start(date)
+    timesheet_file = get_timesheet_data()
+
+    report = []
+    for timesheet in timesheet_file["timesheets"]:
+        # find existing timesheets
+        if parse.get_date(timesheet["week_starting"]) == week_start:
+            # timesheet found, so print entries for that week
+            report.append(
+                typer.style("Week starting: ", bold=True)
+                + typer.style(week_start.strftime("%Y-%m-%d"), fg=typer.colors.MAGENTA)
+            )
+            for event_type in ["work", "holiday", "sick"]:
+                for event in timesheet[event_type]:
+                    start = datetime.fromisoformat(event["start"])
+                    end = datetime.fromisoformat(event["end"])
+                    report.append(
+                        typer.style(event_type, bold=True)
+                        + f" from {start.strftime('%Y-%m-%d %H:%M')} to {end.strftime('%Y-%m-%d %H:%M')}"
+                    )
+            typer.echo("\n".join(report))
