@@ -1,13 +1,12 @@
 import csv
 from datetime import datetime, timedelta
 from io import StringIO
-from os import walk
 from unittest.mock import call, patch
 
-import flex_timesheet.common.timesheet as ts
+import timesheet.common.timesheet as ts
 import pytest
 import typer
-from flex_timesheet.commands.report import (
+from timesheet.commands.report import (
     EchoWriter,
     format_hours_and_minutes,
     get_timesheet_data,
@@ -60,10 +59,10 @@ def mock_timesheet_data():
     }
 
 
-@patch("flex_timesheet.common.configuration.get_default_config_path")
-@patch("flex_timesheet.common.configuration.read")
-@patch("flex_timesheet.common.configuration.get_timesheet_file")
-@patch("flex_timesheet.common.timesheet.retrieve_timesheet_file")
+@patch("timesheet.common.configuration.get_default_config_path")
+@patch("timesheet.common.configuration.read")
+@patch("timesheet.common.configuration.get_timesheet_file")
+@patch("timesheet.common.timesheet.retrieve_timesheet_file")
 def test_get_timesheet_data(
     mock_retrieve, mock_get_file, mock_read, mock_get_path, mock_timesheet_data
 ):
@@ -81,12 +80,12 @@ def test_format_hours_and_minutes():
     assert result == "5 hours, 30 minutes"
 
 
-@patch("flex_timesheet.commands.report.get_timesheet_data")
+@patch("timesheet.commands.report.get_timesheet_data")
 @patch("typer.echo")
-@patch("flex_timesheet.common.calculations.aggregate")
-@patch("flex_timesheet.common.calculations.aggregate_timedeltas")
-@patch("flex_timesheet.common.calculations.split_timedelta")
-@patch("flex_timesheet.common.parse.get_date")
+@patch("timesheet.common.calculations.aggregate")
+@patch("timesheet.common.calculations.aggregate_timedeltas")
+@patch("timesheet.common.calculations.split_timedelta")
+@patch("timesheet.common.parse.get_date")
 def test_report(
     mock_get_date,
     mock_split,
@@ -101,7 +100,7 @@ def test_report(
     mock_aggregate.return_value = timedelta(hours=8)
     mock_aggregate_timedeltas.return_value = timedelta(hours=8)
 
-    def mock_split_side_effect(*args, **kwargs):
+    def mock_split_side_effect(*args):
         if args[0] == mock_aggregate_timedeltas.return_value:
             return (0, 0, 0)
         return (8, 0, 0)
@@ -122,10 +121,10 @@ def test_report(
     assert "Total flex: 8 hours, 0 minutes" in typer.unstyle(output)
 
 
-@patch("flex_timesheet.commands.report.get_timesheet_data")
+@patch("timesheet.commands.report.get_timesheet_data")
 @patch("typer.echo")
-@patch("flex_timesheet.common.parse.get_date")
-@patch("flex_timesheet.common.timesheet.get_week_start")
+@patch("timesheet.common.parse.get_date")
+@patch("timesheet.common.timesheet.get_week_start")
 def test_show_entries(
     mock_get_week_start,
     mock_get_date,
@@ -163,7 +162,7 @@ def test_create_new_timesheet():
     }
 
 
-@patch("flex_timesheet.commands.report.get_timesheet_data")
+@patch("timesheet.commands.report.get_timesheet_data")
 @patch("typer.echo")
 def test_show_csv(mock_echo, mock_get_timesheet_data, mock_timesheet_data):
     mock_get_timesheet_data.return_value = mock_timesheet_data
@@ -185,7 +184,7 @@ def test_show_csv(mock_echo, mock_get_timesheet_data, mock_timesheet_data):
     mock_echo.assert_has_calls(expected_calls, any_order=False)
 
 
-@patch("flex_timesheet.commands.report.get_timesheet_data")
+@patch("timesheet.commands.report.get_timesheet_data")
 def test_show_csv_output_format(mock_get_timesheet_data, mock_timesheet_data):
     mock_get_timesheet_data.return_value = mock_timesheet_data
 

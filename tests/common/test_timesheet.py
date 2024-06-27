@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flex_timesheet.common import timesheet
+from timesheet.common import timesheet
 
 
 def test_retrieve_timesheet_file(tmp_path):

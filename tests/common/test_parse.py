@@ -1,6 +1,6 @@
 import pytest
-import flex_timesheet.common.parse as parse
-from flex_timesheet.common.parse import InputException
+import timesheet.common.parse as parse
+from timesheet.common.parse import InputException
 
 
 #

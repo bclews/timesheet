@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import pytest
 import tempfile
-from flex_timesheet.common import configuration
+from timesheet.common import configuration
 
 
 def test_get_default_config_path():

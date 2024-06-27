@@ -1,6 +1,6 @@
-from flex_timesheet.common import parse
-import flex_timesheet.common.configuration as conf
-import flex_timesheet.common.timesheet as ts
+from timesheet.common import parse
+import timesheet.common.configuration as conf
+import timesheet.common.timesheet as ts
 
 
 def add_event(event_type, time_start, time_end, the_date, location=None):

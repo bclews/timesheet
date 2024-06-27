@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 from pathlib import Path
 
-import flex_timesheet.commands.configuration as conf
+import timesheet.commands.configuration as conf
 
 # Mock data
 mock_config_data = {"timesheet_file": "~/timesheet.json"}
@@ -13,8 +13,8 @@ def mock_config_path():
     return Path("/mock/config/path")
 
 
-@patch("flex_timesheet.common.configuration.read")
-@patch("flex_timesheet.common.configuration.write")
+@patch("timesheet.common.configuration.read")
+@patch("timesheet.common.configuration.write")
 @patch("typer.prompt")
 @patch("os.path.expanduser")
 def test_configure(
@@ -39,7 +39,7 @@ def test_configure(
     mock_write.assert_called_once_with(mock_config_path, expected_config_data)
 
 
-@patch("flex_timesheet.common.configuration.read")
+@patch("timesheet.common.configuration.read")
 def test_show_config(mock_read, mock_config_path):
     # Arrange
     mock_read.return_value = mock_config_data

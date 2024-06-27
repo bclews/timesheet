@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 import typer
-from flex_timesheet.common import calculations, configuration, parse
-import flex_timesheet.common.timesheet as ts
+from timesheet.common import calculations, configuration, parse
+import timesheet.common.timesheet as ts
 import csv
 
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import typer
 
-import flex_timesheet.common.configuration as conf
+import timesheet.common.configuration as conf
 
 
 def configure(config_path: Path):

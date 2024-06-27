@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-import flex_timesheet.common.calculations as calculations
+import timesheet.common.calculations as calculations
 import pytest
 
 

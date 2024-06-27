@@ -3,10 +3,10 @@ from pathlib import Path
 
 import typer
 
-from flex_timesheet.common import parse
-import flex_timesheet.commands.report as r
-import flex_timesheet.commands.configuration as c
-import flex_timesheet.commands.timesheet as ts
+from timesheet.common import parse
+import timesheet.commands.report as r
+import timesheet.commands.configuration as c
+import timesheet.commands.timesheet as ts
 
 WORK = "work"
 FLEX = "flex"

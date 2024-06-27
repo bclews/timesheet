@@ -1,6 +1,6 @@
 import json
 
-from flex_timesheet.common import calculations, configuration, parse
+from timesheet.common import calculations, configuration, parse
 
 
 def retrieve_timesheet_file(timesheet_file_path):

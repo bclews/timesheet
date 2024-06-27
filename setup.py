@@ -16,7 +16,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "timesheet=flex_timesheet.cli:app",
+            "timesheet=timesheet.cli:app",
         ],
     },
     classifiers=[

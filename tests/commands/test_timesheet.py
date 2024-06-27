@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 from datetime import datetime
 
-from flex_timesheet.commands.timesheet import add_event
+from timesheet.commands.timesheet import add_event
 
 # Mock data
 mock_event_log = {"start": "09:00", "end": "17:00", "date": "2024-06-27"}
@@ -35,12 +35,12 @@ def mock_get_location():
     return "Office"
 
 
-@patch("flex_timesheet.common.timesheet.save_timesheet_file")
-@patch("flex_timesheet.common.timesheet.retrieve_timesheet_file")
-@patch("flex_timesheet.common.timesheet.create_event_log")
-@patch("flex_timesheet.common.timesheet.get_week_start")
-@patch("flex_timesheet.common.configuration.get_timesheet_file")
-@patch("flex_timesheet.common.parse.get_date")
+@patch("timesheet.common.timesheet.save_timesheet_file")
+@patch("timesheet.common.timesheet.retrieve_timesheet_file")
+@patch("timesheet.common.timesheet.create_event_log")
+@patch("timesheet.common.timesheet.get_week_start")
+@patch("timesheet.common.configuration.get_timesheet_file")
+@patch("timesheet.common.parse.get_date")
 def test_add_event_existing_timesheet(
     mock_get_date,
     mock_get_timesheet_file,
@@ -83,12 +83,12 @@ def test_add_event_existing_timesheet(
     )
 
 
-@patch("flex_timesheet.common.timesheet.save_timesheet_file")
-@patch("flex_timesheet.common.timesheet.retrieve_timesheet_file")
-@patch("flex_timesheet.common.timesheet.create_event_log")
-@patch("flex_timesheet.common.timesheet.create_new_timesheet")
-@patch("flex_timesheet.common.timesheet.get_week_start")
-@patch("flex_timesheet.common.configuration.get_timesheet_file")
+@patch("timesheet.common.timesheet.save_timesheet_file")
+@patch("timesheet.common.timesheet.retrieve_timesheet_file")
+@patch("timesheet.common.timesheet.create_event_log")
+@patch("timesheet.common.timesheet.create_new_timesheet")
+@patch("timesheet.common.timesheet.get_week_start")
+@patch("timesheet.common.configuration.get_timesheet_file")
 def test_add_event_new_timesheet(
     mock_get_timesheet_file,
     mock_get_week_start,
