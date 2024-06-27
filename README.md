@@ -84,6 +84,58 @@ Add a period of holiday to the timesheet.
 timesheet holiday 09:00 17:00 2023-01-01
 ```
 
+## Timesheet Format
+
+The timesheet is saved as a JSON file, defined in the configuration. The JSON structure of the timesheet is as follows:
+
+```json
+{
+  "standard_working_hours_per_week": {
+    "hours": 36,
+    "minutes": 45,
+    "days_in_working_week": 5
+  },
+  "flextime_balance": {
+    "days": 0,
+    "seconds": 0
+  },
+  "timesheets": [
+    {
+      "week_starting": "2023-07-03",
+      "work": [
+        {
+          "start": "2023-07-03T09:00:00",
+          "end": "2023-07-03T16:21:00",
+          "location": "Home"
+        },
+        {
+          "start": "2023-07-04T09:00:00",
+          "end": "2023-07-04T16:21:00",
+          "location": "Onsite"
+        },
+        {
+          "start": "2023-07-05T09:00:00",
+          "end": "2023-07-05T16:21:00",
+          "location": "Home"
+        },
+        {
+          "start": "2023-07-06T09:00:00",
+          "end": "2023-07-06T16:21:00",
+          "location": "Home"
+        },
+        {
+          "start": "2023-07-07T09:00:00",
+          "end": "2023-07-07T16:21:00",
+          "location": "Home"
+        }
+      ],
+      "holiday": [],
+      "sick": []
+    }
+  ]
+}
+```
+
 ## Commands Overview
 
 - `configure` - Configure the timesheet application.
@@ -102,19 +154,6 @@ To run the tests, use `pytest`:
 pytest
 ```
 
-## Contributing
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add new feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Open a pull request.
-
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
-
-```
-
-This README.md now includes instructions on how to install and use the CLI application based on your `setup.py` file. Adjust any additional details as necessary.
