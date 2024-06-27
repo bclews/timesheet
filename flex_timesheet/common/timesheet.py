@@ -32,7 +32,6 @@ def create_new_timesheet(the_date, event_type, event_log):
     new_timesheet = {
         "week_starting": the_date.strftime("%Y-%m-%d"),
         "work": [],
-        "flex": [],
         "holiday": [],
         "sick": [],
     }
